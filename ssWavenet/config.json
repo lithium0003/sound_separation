@@ -1,0 +1,62 @@
+{
+    "model": {
+        "dilations": 10,
+        "filters": {
+            "lengths": {
+                "res": 3,
+                "final": [3, 3],
+                "skip": 1
+            },
+            "depths": {
+                "res": 64,
+                "skip": 64,
+                "final": [2048, 256]
+            }
+        },
+        "num_stacks": 4,
+        "target_field_length": 2201,
+        "target_padding": 1,
+	"num_sources": 2
+    },
+    "learning": {
+	"learning_rate": 1e-4,
+	"loss_weights" : [1.0, 1.0]
+    },
+    "training": {
+        "batch_size": 4,
+        "early_stopping_patience": 16,
+        "num_epochs": 250,
+        "num_steps_test": 50,
+        "num_steps_train": 2000,
+        "path": "sessions/001",
+        "verbosity": 1
+    },
+    "tensorboard": {
+	"path": "logs/001"
+    },
+    "dataset": 
+	{"train":
+		{"vocal1": [
+			"data/train/part1_12.wav"
+		],
+		"vocal2": [
+			"data/train/part2_12.wav"
+		],
+		"mixture": [
+			"data/train/mixture_12.wav"
+		 ]
+		},
+	 "val":
+		{"vocal1": [
+			"data/val/part1_12.wav"
+		],
+		"vocal2": [
+			"data/val/part2_12.wav"
+		],
+		"mixture": [
+			"data/val/mixture_12.wav"
+		 ]
+		}
+	}
+    
+}

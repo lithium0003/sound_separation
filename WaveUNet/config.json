@@ -1,0 +1,49 @@
+{
+	"model": {
+		"num_layers" : 12,
+		"num_initial_filters" : 24,
+		"filter_size" : 15,
+		"merge_filter_size" : 5,
+		"num_sources": 2,
+		"independent_output": true
+	},
+	"learning": {
+		"learning_rate" : 1e-4
+	},
+	"training":{
+		"path": "sessions/001",
+		"early_stopping_patience": 20,
+		"batch_size": 4,
+                "num_frames": 22000,
+		"num_steps_train": 2000,
+		"num_steps_test": 30,
+		"num_epochs": 250
+	},
+	"tensorboard": {
+		"path": "logs/001"
+	},
+	"dataset":{
+		"train":{
+			"vocal1": [
+                        	"data/train/part1_12.wav"
+                	],
+                	"vocal2": [
+                        	"data/train/part2_12.wav"
+     		   	],
+                	"mixture": [
+                        	"data/train/mixture_12.wav"
+                 	]
+        	},
+        	"val": {
+			"vocal1": [
+                        	"data/val/part1_12.wav"
+                	],
+                	"vocal2": [
+                        	"data/val/part2_12.wav"
+                	],
+                	"mixture": [
+                        	"data/val/mixture_12.wav"
+                	]
+        	}
+    	}
+}
