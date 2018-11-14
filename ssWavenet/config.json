@@ -14,7 +14,7 @@
             }
         },
         "num_stacks": 4,
-        "target_field_length": 2201,
+        "target_field_length": 4411,
         "target_padding": 1,
 	"num_sources": 2
     },
@@ -23,7 +23,7 @@
 	"loss_weights" : [1.0, 1.0]
     },
     "training": {
-        "batch_size": 4,
+        "batch_size": 8,
         "early_stopping_patience": 16,
         "num_epochs": 250,
         "num_steps_test": 50,

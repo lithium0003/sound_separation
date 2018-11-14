@@ -14,7 +14,7 @@
 		"path": "sessions/001",
 		"early_stopping_patience": 20,
 		"batch_size": 4,
-                "num_frames": 22000,
+                "num_frames": 16384,
 		"num_steps_train": 2000,
 		"num_steps_test": 30,
 		"num_epochs": 250
