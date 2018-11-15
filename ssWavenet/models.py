@@ -214,7 +214,7 @@ class SeparationWavenet():
             return tf.keras.optimizers.Adam(lr=self.config['learning']['learning_rate'])
 
     def get_out_loss(self):
-        return lambda y_true, y_pred: tf.keras.losses.mean_squared_error(y_true, y_pred)
+        return lambda y_true, y_pred: tf.keras.losses.mean_absolute_error(y_true, y_pred)
 
     def get_callbacks(self):
         
