@@ -25,9 +25,6 @@ def read_wav(filename):
     amp = abs(np.max(audio_signal) - np.min(audio_signal))/2
     audio_signal = audio_signal / amp * 0.5
 
-    if audio_signal.ndim > 1:
-        audio_signal = (audio_signal[:, 0] + audio_signal[:, 1])/2
-
     return audio_signal, sample_rate
 
 def write_wav(x, filename, sample_rate):
