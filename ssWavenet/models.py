@@ -310,20 +310,16 @@ class SeparationWavenet():
                 data_out = tf.keras.layers.LeakyReLU()(data_out)
 
         with tf.name_scope('Final') as scope:
-            data_out = tf.keras.layers.Convolution1D(self.num_sources, 1)(data_out)
+            data_out = tf.keras.layers.Convolution1D(self.num_sources*self.num_channels, 1)(data_out)
             data_out = tf.keras.layers.Activation('tanh')(data_out)
 
         outputs = []
         for i in range(self.num_sources):
             with tf.name_scope('Output%d'%(i+1)) as scope:
-                data_out_sep = Slice((Ellipsis, slice(i, i+1)), (self.padded_target_field_length, 1),
-                                       name='slice_data_output%d'%(i+1))(data_out)
-                data_out_sep = tf.keras.layers.Lambda(lambda x: tf.squeeze(x, 2),
-                                                    output_shape=lambda shape: (shape[0], shape[1]), 
-                                                    name='data_output%d'%(i+1))(data_out_sep)
+                data_out_sep = Slice((Ellipsis, slice(i*self.num_channels, (i+1)*self.num_channels)), (self.padded_target_field_length, self.num_channels),
+                                       name='data_output%d'%(i+1))(data_out)
                 outputs.append(data_out_sep)
 
-        #return keras.engine.Model(inputs=[data_input], outputs=[data_out_vocals_1, data_out_vocals_2])
         return tf.keras.models.Model(inputs=[data_input], outputs=outputs)
 
     def dilated_residual_block(self, data_x, res_block_i, layer_i, dilation, stack_i):
