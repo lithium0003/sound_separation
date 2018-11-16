@@ -1,6 +1,6 @@
 import numpy as np
 import soundfile as sf
-from joblib import Parallel, delayed
+import concurrent.futures
 
 def wav_to_float(x):
 
@@ -88,21 +88,22 @@ class VoiceDataset():
         if dataset not in ['train', 'val']:
             raise ValueError("Argument SET must be either 'train' or 'val'")
 
-        while True:
-            batch_outputs = {}
-            batch_inputs = []
-            for i in range(self.model.num_sources):
-                batch_outputs['data_output%d'%(i+1)] = []
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            while True:
+                batch_outputs = {}
+                batch_inputs = []
+                for i in range(self.model.num_sources):
+                    batch_outputs['data_output%d'%(i+1)] = []
 
-            outs = Parallel(n_jobs=-1, backend="threading")(delayed(self.get_next)(dataset) for _ in range(self.batch_size))
-            for indata, outdata in outs:
-                batch_inputs.append(indata)
-                for i, chdata in enumerate(outdata):
-                    batch_outputs['data_output%d'%(i+1)].append(chdata)
+                outs = executor.map(lambda x: self.get_next(dataset), range(self.batch_size))
+                for indata, outdata in outs:
+                    batch_inputs.append(indata)
+                    for i, chdata in enumerate(outdata):
+                        batch_outputs['data_output%d'%(i+1)].append(chdata)
 
-            batch_inputs = np.array(batch_inputs, dtype='float32')
-            for i in range(self.model.num_sources):
-                batch_outputs['data_output%d'%(i+1)] = np.array(batch_outputs['data_output%d'%(i+1)], dtype='float32')
+                batch_inputs = np.array(batch_inputs, dtype='float32')
+                for i in range(self.model.num_sources):
+                    batch_outputs['data_output%d'%(i+1)] = np.array(batch_outputs['data_output%d'%(i+1)], dtype='float32')
 
-            batch = {'data_input': batch_inputs}, batch_outputs
-            yield batch
+                batch = {'data_input': batch_inputs}, batch_outputs
+                yield batch
