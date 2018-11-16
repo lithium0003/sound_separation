@@ -151,7 +151,8 @@ class SeparationWavenet():
         self.target_sample_indices = self.get_target_field_indices()
 
         self.num_sources = config['model']['num_sources']
-
+        self.num_channels = 2
+        
         self.epoch_num = 0
 
         self.model = self.setup_model()
@@ -274,16 +275,14 @@ class SeparationWavenet():
     def build_model(self):
 
         data_input = tf.keras.layers.Input(
-                shape=(self.input_length,),
+                shape=(self.input_length, self.num_channels),
                 name='data_input')
-
-        data_expanded = AddSingletonDepth()(data_input)
 
         with tf.name_scope('Initial') as scope:
             data_out = tf.keras.layers.Convolution1D(self.config['model']['filters']['depths']['res'],
                                                   self.config['model']['filters']['lengths']['res'], padding='same',
                                                   use_bias=False,
-                                                  name='initial_causal_conv')(data_expanded)
+                                                  name='initial_causal_conv')(data_input)
 
         skip_connections = []
         res_block_i = 0
